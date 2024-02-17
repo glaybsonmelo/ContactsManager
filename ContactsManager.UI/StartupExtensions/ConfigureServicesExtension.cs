@@ -1,4 +1,5 @@
-﻿using Entities;
+﻿using ContactsManager.Core.Domain.IdentityEntities;
+using Entities;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
 using RespositoryContracts;
@@ -31,6 +32,9 @@ namespace CRUDExample
             {
                 options.UseSqlServer(configuration.GetConnectionString("Default"));
             });
+
+            // enable identity in this project
+            services.AddIdentity<ApplicationUser, ApplicationRole>();
             return services;
         }
     }
