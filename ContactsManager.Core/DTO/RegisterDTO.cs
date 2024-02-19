@@ -11,7 +11,7 @@ namespace ContactsManager.Core.DTO
     public class RegisterDTO
     {
         [Required(ErrorMessage = "{0} can't be blank")]
-        [Range(2, 255, ErrorMessage = "{0} field should be beetwen 2 and 255")]
+        [StringLength(255)]
         public string? Name { get; set; }
         [Required(ErrorMessage = "{0} can't be blank")]
         [EmailAddress( ErrorMessage = "Email should be in a proper email address format")]

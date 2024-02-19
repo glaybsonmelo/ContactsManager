@@ -1,5 +1,7 @@
 ﻿using ContactsManager.Core.Domain.IdentityEntities;
 using Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
 using RespositoryContracts;
@@ -34,7 +36,12 @@ namespace CRUDExample
             });
 
             // enable identity in this project
-            services.AddIdentity<ApplicationUser, ApplicationRole>();
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders()
+                .AddUserStore<UserStore<ApplicationUser, ApplicationRole, ApplicationDbContext, Guid>>()
+                .AddRoleStore<RoleStore<ApplicationRole, ApplicationDbContext, Guid>>();
+
             return services;
         }
     }
