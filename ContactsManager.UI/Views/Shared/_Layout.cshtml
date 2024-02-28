@@ -22,8 +22,18 @@
                         <div class="navbar account-links">
                             <ul>
                                 <li>
-                                <a asp-controller="Account" asp-action="Register">Register</a>
-                                <a asp-controller="Account" asp-action="Login"> login</a>
+                                    @User.Identity?.Name
+                                </li>
+                                <li>
+                                    @if (User.Identity.IsAuthenticated == false)
+                                    {
+                                        <a asp-controller="Account" asp-action="Login"> login</a>
+                                        <a asp-controller="Account" asp-action="Register">Register</a>
+
+                                    } else
+                                    {
+                                        <a asp-controller="Account" asp-action="Logout"> logout</a>
+                                    }
                                 </li>
                             </ul>
                         </div>

@@ -28,9 +28,11 @@ if (app.Environment.IsEnvironment("Test") == false) {
         .Setup("wwwroot", wkhtmltopdfRelativePath: "Rotativa");
 }
 
+
 app.UseStaticFiles();
-app.UseRouting();
-app.MapControllers();
+app.UseAuthentication(); //Reading identity cookie
+app.UseRouting(); // Identifying action method based on route
+app.MapControllers(); // Execute the filter pipeline (actino + filters)
 
 app.Run();
 

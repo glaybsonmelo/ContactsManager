@@ -25,6 +25,7 @@ namespace ContactsManager.Core.DTO
         [Required(ErrorMessage = "{0} can't be blank")]
         [DataType(DataType.Password)]
         [Display(Name = "Confirm Password")]
+        [Compare("Password", ErrorMessage = "Password and Confirm Password don't match")]
         public string? ConfirmPassword { get; set; }
     }
 }
