@@ -21,20 +21,39 @@
                     <div class="flex-2 pr" id="search-box-div">
                         <div class="navbar account-links">
                             <ul>
-                                <li>
-                                    @User.Identity?.Name
-                                </li>
-                                <li>
-                                    @if (User.Identity.IsAuthenticated == false)
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <li>
+                                            <i class="fa-solid fa-user"></i>
+                                                @User.Identity?.Name
+                                        </li>
+                                        <li>
+                                        <a asp-controller="Account" asp-action="Logout"> logout</a>
+                                    </li>
+                                } else
+                                {
+                                    <li>
+                                    @if( ViewBag.CurrentUrl == "~/Account/Register")
+                                    {
+                                        <a asp-controller="Account" asp-action="Register" class="nav-active">Register</a>
+                                    }else
+                                    {
+                                        <a asp-controller="Account" asp-action="Register">Register</a>
+                                    }
+                                    </li>
+                                    <li>
+
+                                    @if ( ViewBag.CurrentUrl == "~/Account/Login")
+                                    {
+                                        <a asp-controller="Account" asp-action="Login" class="nav-active"> login</a>
+
+                                    }else
                                     {
                                         <a asp-controller="Account" asp-action="Login"> login</a>
-                                        <a asp-controller="Account" asp-action="Register">Register</a>
-
-                                    } else
-                                    {
-                                        <a asp-controller="Account" asp-action="Logout"> logout</a>
                                     }
-                                </li>
+                                    </li>
+
+                                }
                             </ul>
                         </div>
                     </div>
@@ -42,10 +61,22 @@
             </div>
             <div class="navbar mb">
                 <ul>
-                    <li>
-                        <a asp-controller="Persons" asp-action="Index">Persons</a>
-                        <a asp-controller="Countries" asp-action="Login">Countries</a>
-                    </li>
+                    @*<a asp-controller="Account" asp-action="Login"> login</a>*@
+
+                    @if(   ViewBag.CurrentUrl == "~/Persons/Index")
+                    {
+                    
+                        <li>
+                            <a asp-controller="Persons" asp-action="Index" class="nav-active">Persons</a>
+                            @* <a asp-controller="Countries" asp-action="Login">Countries</a>*@
+                        </li> 
+                    }else
+                    {
+                        <li>
+                            <a asp-controller="Persons" asp-action="Index">Persons</a>
+                            @* <a asp-controller="Countries" asp-action="Login">Countries</a>*@
+                        </li>
+                    }
                 </ul>
             </div>
             <div class="body">
