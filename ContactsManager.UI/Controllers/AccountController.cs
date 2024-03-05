@@ -61,7 +61,7 @@ namespace ContactsManager.UI.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Login(LoginDTO loginDTO)
+        public async Task<IActionResult> Login(LoginDTO loginDTO, string? ReturnUrl)
         {
             if(!ModelState.IsValid)
             {
@@ -72,6 +72,10 @@ namespace ContactsManager.UI.Controllers
 
             if (result.Succeeded)
             {
+                if(!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
+                {
+                    return LocalRedirect(ReturnUrl);
+                }
                 return RedirectToAction(nameof(PersonsController.Index), "Persons");
             }
             ModelState.AddModelError("Login", "Invalid email or password");
