@@ -30,8 +30,9 @@ if (app.Environment.IsEnvironment("Test") == false) {
 
 
 app.UseStaticFiles();
-app.UseAuthentication(); //Reading identity cookie
 app.UseRouting(); // Identifying action method based on route
+app.UseAuthentication(); //Reading identity cookie
+app.UseAuthorization(); // Validates access permitions of the user
 app.MapControllers(); // Execute the filter pipeline (actino + filters)
 
 app.Run();
