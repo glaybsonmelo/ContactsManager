@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Serialization;
+﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,9 +14,12 @@ namespace ContactsManager.Core.DTO
         [Required(ErrorMessage = "{0} can't be blank")]
         [StringLength(255)]
         public string? Name { get; set; }
+
         [Required(ErrorMessage = "{0} can't be blank")]
         [EmailAddress( ErrorMessage = "Email should be in a proper email address format")]
+        [Remote(action: "IsEmailAlreadyRegistered", controller: "Account", ErrorMessage = "Email is already in use")]
         public string? Email { get; set; }
+
         [Required(ErrorMessage = "{0} can't be blank")]
         [RegularExpression("^[0-9]*$", ErrorMessage = "{0} should contain only numbers")]
         public string? Phone { get; set; }

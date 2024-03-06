@@ -87,5 +87,10 @@ namespace ContactsManager.UI.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction(nameof(PersonsController.Index), "Persons");
         }
+        public async Task<IActionResult> IsEmailAlreadyRegistered(string email)
+        {
+            ApplicationUser? user = await _userManager.FindByEmailAsync(email);
+            return Json(user == null);
+        }
     }
 }
