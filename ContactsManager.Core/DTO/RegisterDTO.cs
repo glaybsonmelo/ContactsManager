@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ContactsManager.Core.Enums;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
@@ -31,5 +32,6 @@ namespace ContactsManager.Core.DTO
         [Display(Name = "Confirm Password")]
         [Compare("Password", ErrorMessage = "Password and Confirm Password don't match")]
         public string? ConfirmPassword { get; set; }
+        public UserTypeOptions UserType { get; set; } = UserTypeOptions.User;
     }
 }

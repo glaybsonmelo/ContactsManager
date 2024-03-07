@@ -1,5 +1,6 @@
 ﻿using ContactsManager.Core.Domain.IdentityEntities;
 using ContactsManager.Core.DTO;
+using ContactsManager.Core.Enums;
 using CRUDExample.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -13,10 +14,12 @@ namespace ContactsManager.UI.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        private readonly RoleManager<ApplicationRole> _roleManager;
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
         }
         [HttpGet]
         public IActionResult Register()
@@ -41,6 +44,21 @@ namespace ContactsManager.UI.Controllers
             IdentityResult result = await _userManager.CreateAsync(user, registerDTO.Password);
             if (result.Succeeded) 
             {
+                if(registerDTO.UserType == UserTypeOptions.Admin)
+                {
+                    // Create 'Admin' role
+                    if (await _roleManager.FindByNameAsync(registerDTO.UserType.ToString()) is null)
+                    {
+                        ApplicationRole applicationRole = new ApplicationRole() { Name = UserTypeOptions.Admin.ToString()  };
+                        await _roleManager.CreateAsync(applicationRole);
+                    } ;
+                    await _userManager.AddToRoleAsync(user, UserTypeOptions.Admin.ToString());
+                }
+                else
+                {
+                    // Add new user into 'Admin' role
+                    await _userManager.AddToRoleAsync(user, UserTypeOptions.User.ToString());
+                }
                 //Sign in
                 await _signInManager.SignInAsync(user, isPersistent: true);
                 return RedirectToAction(nameof(PersonsController.Index), "Persons");
@@ -81,7 +99,6 @@ namespace ContactsManager.UI.Controllers
             ModelState.AddModelError("Login", "Invalid email or password");
             return View(loginDTO);
         }
-
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
