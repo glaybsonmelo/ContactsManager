@@ -50,11 +50,13 @@ namespace CRUDExample
                 .AddDefaultTokenProviders()
                 .AddUserStore<UserStore<ApplicationUser, ApplicationRole, ApplicationDbContext, Guid>>()
                 .AddRoleStore<RoleStore<ApplicationRole, ApplicationDbContext, Guid>>();
+
             services.AddAuthorization(options =>
             {
                 options.FallbackPolicy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
-                    .Build();  // enforces authorization policy (user must be authenticated) for all the action methods  ;
+                    .Build();  // enforces authorization policy (user must be authenticated) for all the action methods
+
             });
             services.ConfigureApplicationCookie(options =>
             {
