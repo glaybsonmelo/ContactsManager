@@ -21,6 +21,8 @@ if (app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error");
     app.UseExceptionHandlingMiddleware();
 }
+app.UseHsts();
+app.UseHttpsRedirection();
 
 if (app.Environment.IsEnvironment("Test") == false) {
     //Rotativa executable (for convert view into pdf)
