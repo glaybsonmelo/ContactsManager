@@ -3,6 +3,7 @@ using Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
 using RespositoryContracts;
@@ -15,7 +16,10 @@ namespace CRUDExample
     {
         public static IServiceCollection ConfigureServices(this IServiceCollection services, ConfigurationManager configuration)
         {
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
 
             //add services into IoC container
             services.AddScoped<ICountriesRepository, CountriesRepository>();

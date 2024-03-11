@@ -29,6 +29,7 @@ namespace ContactsManager.UI.Controllers
         }
         [HttpPost]
         [Authorize("NotAuthorized")]
+      // [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterDTO registerDTO)
         {
             if (!ModelState.IsValid)
@@ -49,7 +50,7 @@ namespace ContactsManager.UI.Controllers
                 if(registerDTO.UserType == UserTypeOptions.Admin)
                 {
                     // Create 'Admin' role
-                    if (await _roleManager.FindByNameAsync(registerDTO.UserType.ToString()) is null)
+                    if (await _roleManager.FindByNameAsync(UserTypeOptions.Admin.ToString()) is null)
                     {
                         ApplicationRole applicationRole = new ApplicationRole() { Name = UserTypeOptions.Admin.ToString()  };
                         await _roleManager.CreateAsync(applicationRole);
@@ -59,6 +60,11 @@ namespace ContactsManager.UI.Controllers
                 else
                 {
                     // Add new user into 'Admin' role
+                    if (await _roleManager.FindByNameAsync(UserTypeOptions.User.ToString()) is null)
+                    {
+                        ApplicationRole applicationRole = new ApplicationRole() { Name = UserTypeOptions.User.ToString() };
+                        await _roleManager.CreateAsync(applicationRole);
+                    };
                     await _userManager.AddToRoleAsync(user, UserTypeOptions.User.ToString());
                 }
                 //Sign in
@@ -82,6 +88,7 @@ namespace ContactsManager.UI.Controllers
             return View();
         }
         [HttpPost]
+        //[ValidateAntiForgeryToken]
         [Authorize("NotAuthorized")]
         public async Task<IActionResult> Login(LoginDTO loginDTO, string? ReturnUrl)
         {
@@ -119,6 +126,7 @@ namespace ContactsManager.UI.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction(nameof(PersonsController.Index), "Persons");
         }
+        [AllowAnonymous]
         public async Task<IActionResult> IsEmailAlreadyRegistered(string email)
         {
             ApplicationUser? user = await _userManager.FindByEmailAsync(email);
